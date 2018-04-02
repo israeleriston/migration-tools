@@ -1,12 +1,8 @@
 #!/usr/bin/env node
-const { green, red } = require('chalk')
 const figlet = require('figlet')
-const migration = require('./migration')
 const yargs = require('yargs')
-
-const emitSuccess = message => console.log(green(` ✔ Success: ${message}`));
-const emitError = message => console.log(red(` ✗ Error: ${message}`));
-
+const { green } = require('chalk')
+const migration = require('./migration')
 
 function init () {
   console.log(
@@ -16,11 +12,9 @@ function init () {
   )
 }
 
-function cli(args) {
+function cli (args) {
   init()
   migration(args)
-  // .then(() => emitSuccess('Migration Finally. '))
-  // .catch(() => emitError('Migration Failed. '))
 }
 
 cli(yargs
