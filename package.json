@@ -2,18 +2,22 @@
   "name": "migration-tools",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/cli.js",
   "dependencies": {
     "chalk": "^2.3.2",
+    "clear": "^0.1.0",
     "co": "^4.6.0",
     "co-prompt": "^1.0.0",
     "command": "^0.0.5",
     "config": "^1.30.0",
+    "figlet": "^1.2.0",
     "pg": "^7.4.1",
-    "progress": "^2.0.0"
+    "progress": "^2.0.0",
+    "yargs": "^11.0.0"
   },
   "devDependencies": {},
   "scripts": {
+    "dev": "node src/cli.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -24,7 +28,7 @@
   "author": "",
   "license": "ISC",
   "bin": {
-    "migration": "./index.js"
+    "migration": "src/cli.js"
   },
   "bugs": {
     "url": "https://github.com/israeleriston/migration-tools/issues"
