@@ -9,6 +9,7 @@ const initOptions = {
     const cp = client.connectionParameters
     console.log(blue('Connected to database:', cp.database))
   },
+  /* uncommented for details error
   error (err, e) {
     if (e.cn) {
       // this is a connection-related error
@@ -28,6 +29,7 @@ const initOptions = {
       // occurred inside a task or transaction
     }
   },
+  */
   query (e) {
     const { text, values } = e.query
     console.log(green('QUERY EXECUTING:', text))

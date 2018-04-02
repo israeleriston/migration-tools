@@ -1,24 +1,30 @@
-const { initOptions } = require('./util')
-const { red } = require('chalk')
-const Database = require('pg-promise')(initOptions)
+const { initOptions, emitError, emitSuccess } = require('./util')
 
-const { findColumn } = require('./query')
+const { findColumn, createFK } = require('./query')
+
+const Database = require('pg-promise')(initOptions)
 
 const connect = url => Database(url)
 
 const migration = (args) => {
-  const { db, table, pk } = args
+  const { db, pk, table } = args
 
-  const connector = connect(db)
+  const pg = connect(db)
   const query = findColumn(pk)
 
-  connector.any(query)
-    .then(data => {
-      console.log('data .: ', data)
+  pg.query(query)
+    .then(data => ({ data }))
+    .then(tables => {
+      tables.data.map(value => {
+        pg.query(createFK(value, table, pk))
+          .then(data => {
+            console.log('deu certo! ' + data)
+          }).catch(err => console.log('deu errado ', err))
+      })
     })
-    .catch(() => {
-      // console.error(red(err.message))
-    })
+    .catch(err =>
+      emitError(err.message)
+    )
 }
 
 module.exports = migration
