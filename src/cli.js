@@ -4,8 +4,8 @@ const figlet = require('figlet')
 const migration = require('./migration')
 const yargs = require('yargs')
 
-const emitSuccess = message => console.log(green(` ✔ Sucesso: ${message}`));
-const emitError = message => console.log(red(` ✗ Erro: ${message}`));
+const emitSuccess = message => console.log(green(` ✔ Success: ${message}`));
+const emitError = message => console.log(red(` ✗ Error: ${message}`));
 
 
 function init () {
