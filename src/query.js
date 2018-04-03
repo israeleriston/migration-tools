@@ -1,12 +1,21 @@
+require('require-sql')
 const { PreparedStatement } = require('pg-promise')
 
+const findColumnQuery = require('./resource/findColumn.sql')
+const createFKQuery = require('./resource/createFK.sql')
+const createPKQuery = require('./resource/createPK.sql')
+
 const findColumn = (...args) =>
-  new PreparedStatement('find-column', 'select table_name from information_schema.columns where column_name = $1', ...args)
+  new PreparedStatement('find-column', findColumnQuery, ...args)
 
 const createFK = (...args) =>
-  new PreparedStatement('create-fk', 'alter table $1  add constraint fk_ || $1 || $$_$$ || $2 foreign key( $3 )  REFERENCES $2( $3 )', ...args)
+  new PreparedStatement('create-fk', createFKQuery, ...args)
+
+const createPK = (...args) =>
+  new PreparedStatement('create-pk', createPKQuery, ...args)
 
 module.exports = {
   findColumn,
-  createFK
+  createFK,
+  createPK
 }

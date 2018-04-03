@@ -16,6 +16,7 @@
     "pg-promise": "^8.2.2",
     "progress": "^2.0.0",
     "ramda": "^0.25.0",
+    "require-sql": "^1.0.0",
     "yargs": "^11.0.0"
   },
   "devDependencies": {
