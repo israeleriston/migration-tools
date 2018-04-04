@@ -1,21 +1,31 @@
+#!/usr/bin/env node
+
 require('require-sql')
 const { PreparedStatement } = require('pg-promise')
+// const { template } = require('lodash/fp')
 
-const findColumnQuery = require('./resource/findColumn.sql')
-const createFKQuery = require('./resource/createFK.sql')
-const createPKQuery = require('./resource/createPK.sql')
+const columnQuery = require('./resource/column.sql')
+const foreingQuery = require('./resource/foreing.sql')
+const primaryQuery = require('./resource/primary.sql')
+
+// const toQuery = (query, args) => {
+//   const compile = template(query)
+//   const apply = compile(args)
+//   console.log(' apply ', apply)
+//   return apply
+// }
 
 const findColumn = (...args) =>
-  new PreparedStatement('find-column', findColumnQuery, ...args)
+  new PreparedStatement('FindColumn', columnQuery, args)
 
-const createFK = (...args) =>
-  new PreparedStatement('create-fk', createFKQuery, ...args)
+const createForeing = (...args) =>
+  new PreparedStatement('CreateForeing', foreingQuery, args)
 
-const createPK = (...args) =>
-  new PreparedStatement('create-pk', createPKQuery, ...args)
+const createPrimary = (...args) =>
+  new PreparedStatement('CreatePrimary', primaryQuery, args)
 
 module.exports = {
   findColumn,
-  createFK,
-  createPK
+  createForeing,
+  createPrimary
 }

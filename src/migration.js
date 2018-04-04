@@ -1,8 +1,9 @@
+#!/usr/bin/env node
 
 const {
   findColumn,
-  createFK,
-  createPK
+  createForeing,
+  createPrimary
 } = require('./query')
 
 const {
@@ -16,18 +17,16 @@ const database = require('pg-promise')(initOptions)
  * path of url database for connection
  * @param {String} url
  */
-const connect = url => database(url)
-
-/**
- * connect for database
- */
-const pg = db => connect(db)
+const pg = url => database(url)
 
 const action = ({ table, pk, db }) => {
-  const parameters = findColumn(pk)
-  pg(db)
-    .any(parameters)
-    .then(data => data)
+  const query = findColumn(pk)
+  return pg(db)
+    .any(query)
+    .then(data => {
+      console.log('data findColumn ', data)
+      return data
+    })
 }
 
 /**
@@ -35,7 +34,7 @@ const action = ({ table, pk, db }) => {
  * @param {Array<String>} args
  */
 const toParameter = (...args) => {
-  const toParam = createFK(args)
+  const toParam = createForeing(args)
   return toParam
 }
 /**
@@ -43,18 +42,21 @@ const toParameter = (...args) => {
  * @param {String} tables
  */
 const sanitize = ({ tables, pk, table, db }) => {
-  const parameters = tables.map(value => toParameter(value, table, pk))
-  parameters.map(value => {
-    pg(db).any(value)
+  const querys = tables.map(value => toParameter(value, table, pk))
+  querys.map(query => {
+    pg(db).any(query)
       .then(data => console.log('sanitize with successefully! ', data))
   })
 }
 
 const normalize = ({ table, pk, db }) => {
-  const parameters = createPK(table, pk)
-  pg(db)
-    .any(parameters)
-    .then(data => console.log('normalize ', data))
+  const query = createPrimary(table, pk)
+  return pg(db)
+    .any(query)
+    .then(data => {
+      console.log('normalize ', data)
+      return data
+    })
 }
 
 /**
@@ -62,8 +64,7 @@ const normalize = ({ table, pk, db }) => {
  * @param {Array} args
  */
 const migration = (args) => {
-  action(args)
-    .then(data => data)
+  return action(args)
     .then(postData => normalize(...args))
     .then(tables => sanitize({ ...tables, ...args }))
     .catch(err => emitError(err.message))
