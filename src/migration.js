@@ -26,7 +26,7 @@ const getTables = (args) => {
   const query = findColumn(pk)
   return conn
     .query(query)
-    .then(tables => createRelation({ tables, args }))
+    .then(tables => createRelation(tables, args))
 }
 
 /**
@@ -39,12 +39,28 @@ const toParameter = (...args) => createForeing(args)
  * array of tables to sanitization
  * @param {String} tables
  */
-const createRelation = (args) => {
-  const { tables, pk, table, conn } = args
+const createRelation = (tables, args) => {
+  const { pk, table, conn } = args
+  if (isEmpty(tables)) {
+    return Promise.reject(new Error(`Not found tables with pk ${pk}`))
+  }
+
   const querys = tables.map(value => toParameter(value, table, pk))
+
+  querys.map(value => {
+    console.log('params map ', value)
+  })
+
   querys.map(param => {
-    return conn.query(param)
-      .then(data => console.log('sanitize with successefully! ', data))
+    conn.any(param)
+      .then(data => {
+        console.log('sanitize with successefully! ', data)
+        console.log(' ta vindo aquii qqq')
+        return data
+      }).catch(err => {
+        console.log(' ta vindo aquii err')
+        return err
+      })
   })
 }
 const create = (args) => {
