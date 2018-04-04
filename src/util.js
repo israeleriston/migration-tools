@@ -5,10 +5,12 @@ const emitError = message => console.log(red(` ✗ Error: ${message}`))
 
 const initOptions = {
 
+  /* uncommented for details connect */
   connect (client, dc, isFresh) {
     const cp = client.connectionParameters
     console.log(blue('Connected to database:', cp.database))
   },
+
   /* uncommented for details error
   error (err, e) {
     if (e.cn) {
@@ -34,7 +36,8 @@ const initOptions = {
     const { text, values } = e.query
     console.log(green('QUERY EXECUTING:', text))
     console.log(green('QUERY VALUES:', values))
-  },
+  }
+  /* uncommeted for info over at trasactions
   transact (e) {
     if (e.ctx.finish) {
       // this is a transaction->finish event;
@@ -45,6 +48,7 @@ const initOptions = {
       console.log(green('Start Time:', e.ctx.start))
     }
   }
+  */
 }
 
 module.exports = {

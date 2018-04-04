@@ -1,8 +1,22 @@
 #!/usr/bin/env node
+
 const figlet = require('figlet')
+
 const yargs = require('yargs')
+
 const { green } = require('chalk')
+
 const migration = require('./migration')
+
+const {
+  emitError,
+  emitSuccess
+} = require('./util')
+
+const {
+  pipe,
+  prop
+} = require('ramda')
 
 function init () {
   console.log(
@@ -15,6 +29,11 @@ function init () {
 function cli (args) {
   init()
   migration(args)
+    .then(() => {
+      emitSuccess('Regeneration PKs and FKs with success!')
+      process.exit(1)
+    })
+    .catch(pipe(prop('message'), emitError))
 }
 
 cli(yargs
