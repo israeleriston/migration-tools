@@ -4,13 +4,13 @@ const figlet = require('figlet')
 
 const yargs = require('yargs')
 
-const { green } = require('chalk')
-
 const migration = require('./migration')
 
 const { emitError, emitSuccess } = require('./util')
 
 const { pipe, prop } = require('ramda')
+
+const { green } = require('chalk')
 
 function init () {
   console.log(
