@@ -8,15 +8,9 @@ const { green } = require('chalk')
 
 const migration = require('./migration')
 
-const {
-  emitError,
-  emitSuccess
-} = require('./util')
+const { emitError, emitSuccess } = require('./util')
 
-const {
-  pipe,
-  prop
-} = require('ramda')
+const { pipe, prop } = require('ramda')
 
 function init () {
   console.log(
