@@ -43,21 +43,20 @@ function converterToQuery (db, service, value, table, pk) {
 }
 
 /**
- * converting anything object for array
- * @param {Object} value
- */
-const toArray = value => isArray(value) ? value : [ value ]
-
-/**
  * normalized tables
  * @param {string} tables
  * @param {string} table
  */
 function normalizeTables (tables, table) {
   const values = tables.rows
-    .map(value => value.table_name)
-    .find(value => value !== table)
-  return toArray(values)
+    .reduce((acc, cur) => {
+      const name = cur.table_name
+      if (name !== table) {
+        acc.push(name)
+      }
+      return acc
+    }, [])
+  return values
 }
 
 /**
@@ -73,15 +72,9 @@ const createRelation = (tables, args) => {
 
   const promises = values.map(value => converterToQuery(db, service, value, table, pk))
 
-  promises.map(promise => {
-    return promise
-      .then(success => {
-        console.log(blue(' FK regeneration with success ', success))
-      })
-      .catch(err => {
-        console.error(yellow(err))
-      })
-  })
+  return Promise
+    .all(promises)
+    .then(success => success)
 }
 
 /**
