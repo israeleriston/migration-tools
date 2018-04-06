@@ -6,6 +6,8 @@ const path = require('path')
 /**
  * url the file from converting file to fullpath
  * @param {String} file
+ * @returns {string}
+ * new String with sql
  */
 function sql (file) {
   const fullPath = path.join(__dirname, file) /** generating full path  */
