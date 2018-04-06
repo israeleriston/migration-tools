@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 
-const { isEmpty, isArray } = require('lodash/fp')
-
-const { blue, yellow } = require('chalk')
+const { isEmpty } = require('lodash/fp')
 
 const repository = require('./repository')
 
