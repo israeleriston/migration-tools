@@ -1,1 +1,2 @@
-ALTER TABLE $1 ADD PRIMARY KEY ( $2 )
+ALTER TABLE ${table}
+  ADD PRIMARY KEY (${pk})

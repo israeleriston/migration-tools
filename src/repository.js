@@ -1,16 +1,21 @@
 const query = require('./query')
-const db = require('./db')
+const { template } = require('lodash/fp')
+
+function transform (text, values) {
+  const compile = template(text)
+  return compile(values)
+}
 
 /**
  * path of connection with database
  * @param {String} url
  * @return {Object} object with operations of migrations
  */
-const repository = (url) => ({
-  search: (column, cn) => db(url).map(query.search, [ column ], cn),
-  searchInternals: (table) => db(url).any(query.searchInternals, [ table ]),
-  createInternals: (table, pk) => db(url).any(query.createInternals, [ table, pk ]),
-  createExternals: (current, pk, table) => db(url).any(query.createExternals, [ current, pk, table ])
+const repository = () => ({
+  search: (column) => transform(query.search, { column }),
+  searchInternals: (table) => transform(query.searchInternals, { table }),
+  createInternals: (table, pk) => transform(query.createInternals, { table, pk }),
+  createExternals: (current, pk, table) => transform(query.createExternals, { current, pk, table })
 })
 
 module.exports = repository

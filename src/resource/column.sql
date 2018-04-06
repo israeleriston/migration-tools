@@ -1,1 +1,1 @@
- select table_name from information_schema.columns where column_name = $1
+ select table_name from information_schema.columns where column_name = '${column}'

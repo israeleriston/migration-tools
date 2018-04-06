@@ -1,13 +1,12 @@
-const { initOptions } = require('./util')
-
-const database = require('pg-promise')(initOptions)
+const { Client } = require('pg')
 
 /**
  * url to connect with database
- * returing object of connecting with database
+ * returing instance of client postgreSQL
  * @param {String} url
- * @returns {conn}
+ * @returns {db}
  */
-const connect = (url) => database(url)
+const db = (url) =>
+  new Client({ connectionString: url })
 
-module.exports = connect
+module.exports = db

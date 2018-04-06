@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
+require('require-sql')
 const path = require('path')
-const { QueryFile } = require('pg-promise')
 
 /**
  * url the file from converting file to fullpath
@@ -9,7 +9,7 @@ const { QueryFile } = require('pg-promise')
  */
 function sql (file) {
   const fullPath = path.join(__dirname, file) /** generating full path  */
-  return new QueryFile(fullPath, { minify: true })
+  return require(fullPath)
 }
 
 module.exports = {
