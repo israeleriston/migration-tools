@@ -4,6 +4,10 @@ const { isEmpty } = require('lodash/fp')
 
 const repository = require('./repository')
 
+/**
+ * arguments of options
+ * @param {String} args
+ */
 const getTables = (args) => {
   const { pk, db } = args
   return repository(db)
@@ -22,12 +26,9 @@ const createRelation = (tables, args) => {
   }
 
   const promises = tables.map(value => repository(db).createExternals(value, table, pk))
-  console.log('promises ', promises)
+
   return Promise.all(promises)
-    .then(values => {
-      console.log('promisses executed with success! ', values)
-      return values
-    })
+    .then(values => values)
 }
 
 /**
