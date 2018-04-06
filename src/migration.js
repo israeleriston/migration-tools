@@ -1,107 +1,62 @@
 #!/usr/bin/env node
 
-const {
-  findColumn,
-  createForeing,
-  createPrimary,
-  checkPrimary
-} = require('./query')
-
-const {
-  initOptions
-} = require('./util')
-
-const database = require('pg-promise')(initOptions)
-
 const { isEmpty } = require('lodash/fp')
 
-/**
- * path of url database for connection
- * @param {String} url
- */
-const pg = url => database(url)
+const repository = require('./repository')
 
 const getTables = (args) => {
-  const { pk, conn } = args
-  const query = findColumn(pk)
-  return conn
-    .query(query)
+  const { pk, db } = args
+  return repository(db)
+    .search(pk, row => row.table_name)
     .then(tables => createRelation(tables, args))
 }
-
-/**
- * to converter parameters for query
- * @param {Array<String>} args
- */
-const toParameter = (...args) => createForeing(args)
 
 /**
  * array of tables to sanitization
  * @param {String} tables
  */
 const createRelation = (tables, args) => {
-  const { pk, table, conn } = args
+  const { pk, table, db } = args
   if (isEmpty(tables)) {
     return Promise.reject(new Error(`Not found tables with pk ${pk}`))
   }
 
-  const querys = tables.map(value => toParameter(value, table, pk))
-
-  querys.map(value => {
-    console.log('params map ', value)
-  })
-
-  querys.map(param => {
-    conn.any(param)
-      .then(data => {
-        console.log('sanitize with successefully! ', data)
-        console.log(' ta vindo aquii qqq')
-        return data
-      }).catch(err => {
-        console.log(' ta vindo aquii err')
-        return err
-      })
-  })
+  const promises = tables.map(value => repository(db).createExternals(value, table, pk))
+  console.log('promises ', promises)
+  return Promise.all(promises)
+    .then(values => {
+      console.log('promisses executed with success! ', values)
+      return values
+    })
 }
-const create = (args) => {
-  const { table, pk, conn } = args
-  const query = createPrimary(table, pk)
-  return conn
-    .query(query)
+
+const create = (data, args) => {
+  const { table, pk, db } = args
+  if (isEmpty(data)) {
+    return Promise.resolve(data)
+  }
+
+  return repository(db)
+    .createInternals(table, pk)
     .then(data => data)
 }
 
 const action = (args) => {
-  const { table, conn } = args
-  const query = checkPrimary(table)
-  return conn
-    .query(query)
-    .then(data => isEmpty(data) ? create(args) : data)
+  const { table, db } = args
+  return repository(db)
+    .searchInternals(table)
+    .then(data => create(data, args))
     .then(() => getTables(args))
 }
-
-//   .then(postData => normalize(...args))
-// .then(tables => sanitize({ ...tables, ...args }))
-
-/**
- * url to connect with database
- * returing object of connecting with database
- * @param {String} db
- * @returns {conn}
- */
-const connect = ({ db }) => pg(db)
 
 /**
  * array of parameters
  * @param {Array} args
  */
-const migration = (args) => {
-  const conn = connect(args)
-
-  const defaults = { ...args, conn }
-
+const migration = (defaults) => {
   return action(defaults)
     .catch(err => {
+      console.log('err', err)
       return Promise.reject(err)
     })
 }

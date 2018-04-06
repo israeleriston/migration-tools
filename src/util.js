@@ -11,7 +11,7 @@ const initOptions = {
     console.log(blue('Connected to database:', cp.database))
   },
 
-  /* uncommented for details error
+  //  uncommented for details error
   error (err, e) {
     if (e.cn) {
       // this is a connection-related error
@@ -22,8 +22,10 @@ const initOptions = {
 
     if (e.query) {
       // query string is available
+      console.log(red(err))
       if (e.params) {
         // query parameters are available
+        console.log(red(err))
       }
     }
 
@@ -31,7 +33,7 @@ const initOptions = {
       // occurred inside a task or transaction
     }
   },
-  */
+
   query (e) {
     const { text, values } = e.query
     console.log(green('QUERY EXECUTING:', text))

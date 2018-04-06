@@ -1,28 +1,17 @@
 #!/usr/bin/env node
 
-require('require-sql')
-const { PreparedStatement } = require('pg-promise')
+const path = require('path')
+const { QueryFile } = require('pg-promise')
 
-const columnQuery = require('./resource/column.sql')
-const foreingQuery = require('./resource/foreing.sql')
-const primaryQuery = require('./resource/primary.sql')
-const checkPrimaryQuery = require('./resource/check.sql')
-
-const findColumn = (...args) =>
-  new PreparedStatement('FindColumn', columnQuery, args)
-
-const createForeing = (...args) =>
-  new PreparedStatement('CreateForeing', foreingQuery, args)
-
-const createPrimary = (...args) =>
-  new PreparedStatement('CreatePrimary', primaryQuery, args)
-
-const checkPrimary = (...args) =>
-  new PreparedStatement('CheckPrimary', checkPrimaryQuery, args)
+function sql (file) {
+  const fullPath = path.join(__dirname, file) /** generating full path  */
+  console.log('SQL => ', fullPath)
+  return new QueryFile(fullPath, { minify: true })
+}
 
 module.exports = {
-  findColumn,
-  createForeing,
-  createPrimary,
-  checkPrimary
+  search: sql('resource/column.sql'),
+  searchInternals: sql('resource/check.sql'),
+  createInternals: sql('resource/primary.sql'),
+  createExternals: sql('resource/foreing.sql')
 }
