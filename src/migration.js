@@ -30,6 +30,11 @@ const createRelation = (tables, args) => {
     })
 }
 
+/**
+ *
+ * @param {Object} data
+ * @param {*} args
+ */
 const create = (data, args) => {
   const { table, pk, db } = args
   if (isEmpty(data)) {
@@ -41,6 +46,10 @@ const create = (data, args) => {
     .then(data => data)
 }
 
+/**
+ * arguments of options
+ * @param {String} args
+ */
 const action = (args) => {
   const { table, db } = args
   return repository(db)
@@ -56,7 +65,6 @@ const action = (args) => {
 const migration = (defaults) => {
   return action(defaults)
     .catch(err => {
-      console.log('err', err)
       return Promise.reject(err)
     })
 }

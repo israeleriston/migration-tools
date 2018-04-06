@@ -5,7 +5,6 @@ const { QueryFile } = require('pg-promise')
 
 function sql (file) {
   const fullPath = path.join(__dirname, file) /** generating full path  */
-  console.log('SQL => ', fullPath)
   return new QueryFile(fullPath, { minify: true })
 }
 

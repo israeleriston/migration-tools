@@ -22,10 +22,10 @@ const initOptions = {
 
     if (e.query) {
       // query string is available
-      console.log(red(err))
+      console.log(red(e.query))
       if (e.params) {
         // query parameters are available
-        console.log(red(err))
+        console.log(red(e.params))
       }
     }
 
