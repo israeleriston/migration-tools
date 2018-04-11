@@ -6,6 +6,8 @@
 migration-tools is a CLI, to recreating Primary Key's and Foreing Key's the databases desnormalized.
 It is designed to be simple in both usage.
 
+## Warning
+only a database postgresql is supported, for a while :/
 
 ## How to use
 
