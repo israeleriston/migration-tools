@@ -9,6 +9,10 @@ It is designed to be simple in both usage.
 ## Warning
 only a database postgresql is supported, for a while :/
 
+## How to install
+
+` npm install -g migration-tools `
+
 ## How to use
 
 The tool will look for all the tables that use this id, passed as parameter,
